@@ -1,18 +1,16 @@
-# 1234567321
-# 15065330
-# 15065330
 import itertools
 
 def next_bigger(num):
-    """
-    1. Test outlier conditions
-    2. Loop through digits from right to left, using sort to check if potential new highest
-    3. Loop only checks up to second highest place digit, create algorithm to check for next largest highest place value
-    """
-
     local_num = str(num)
+    first_digit = local_num[:1]  # Saving First Digit
+    local_minus_first = local_num[1:]
 
-    # Outlier cases - 2 digits
+    # Outlier case #1 - all same digit
+    if local_num.count(first_digit) == len(local_num):
+        return -1
+
+
+    # Outlier case #2 - 2 digits
     if len(local_num) == 2:
         if local_num[:1] >= local_num[1:]:
             return -1
@@ -20,34 +18,29 @@ def next_bigger(num):
             return int((local_num[1:] + local_num[:1]))
 
     else:
-        dcount_floop = 2
+        dcount_floop = 2  # Establish Digit Counter
 
-    while dcount_floop < len(local_num):
+    # Begin looping through digits right to len(num) -1, test if next bigger can be found else continue
+    while dcount_floop <= len(local_num):
         front = local_num[:-dcount_floop]
         original_back = local_num[-dcount_floop:]
+        original_back_firstdigit = original_back[0]
 
-
-        # This bit is not True for following setup: 67321 sorted returns 76---, need 71---
         if "".join(sorted(original_back, reverse=True)) > original_back:
+
             higher_listchunk = sorted(original_back, reverse=True)
-            higher_firstdigit = higher_listchunk.pop(0)
-            sort_higher_listchunk = sorted(higher_listchunk)
-            next_highest = "".join(itertools.chain(higher_firstdigit, sort_higher_listchunk))
+            difference_list = [int(x) - int(original_back_firstdigit) for x in higher_listchunk]
+            sort_dif_list = sorted(difference_list)
+            for x in sort_dif_list:
+                if x > 0:
+                    new_first_digit = higher_listchunk[difference_list.index(x)]
+                    higher_listchunk.remove(new_first_digit)
+                    sort_higher_listchunk = sorted(higher_listchunk)
+                    next_highest = "".join(itertools.chain(new_first_digit, sort_higher_listchunk))
+                    new_while_result = front + next_highest
+                    return int(new_while_result)
         else:
+            dcount_floop += 1
             continue
 
-
-
-
-
-
-
-
-
-
-if __name__ == "__main__":
-    # print(next_bigger(1234567908))
-    # print(next_bigger(59483726))
-    # print(next_bigger(9876789))
-    # print(next_bigger(1357642))
-    print(next_bigger2(890123683457))  # 890123683457
+    return -1
