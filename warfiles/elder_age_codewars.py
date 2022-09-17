@@ -13,6 +13,4 @@ Let's draw out the whole magic rectangle:
 4 5 6 7 0 1 2 3
 
 """
-import math
-math.sqrt()
-desired_sum =
+
