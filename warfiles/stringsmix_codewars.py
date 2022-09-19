@@ -39,12 +39,17 @@ def mix(s1, s2):
             which = "1" if val1 > val2 else "2" if val2 > val1 else "="
             hist[ch] = (-max(val1, val2), which + ":" + ch * max(val1, val2))
     return "/".join(hist[ch][1] for ch in sorted(hist, key=lambda x: hist[x]))
+
+    from collections import Counter
+
+def mix(s1, s2):
+    c1, c2 = [Counter({s: n for s, n in Counter(c).items() if n > 1 and s.islower()}) for c in (s1, s2)]
+    return '/'.join(c + ':' + -n * s for n, c, s in
+                    sorted((-n, '=12'[(c1[s] == n) - (c2[s] == n)], s) for s, n in (c1 | c2).items()))
 """
 import string
 from collections import defaultdict
 import itertools
-
-
 
 def mix(s1: str, s2: str):
 
@@ -87,6 +92,11 @@ def mix(s1: str, s2: str):
             continue
         elif s2r.count(char) > 1:
             dict2[str(char)] = str(s2r.count(char))
+
+    """
+    ***NOTE*** Could have used collections.Counter.items() to create a key(char): val(count) dictionary with logic gateways
+    to remove the unnecessary crap.
+    """
 
             # Update dictionary with dict[COUNT] = char format, check if duplicate and overwrite with higher val_charue
     outputdict: dict = {}
@@ -151,7 +161,6 @@ def mix(s1: str, s2: str):
             res += second_bin.pop(0)
         while equal_bin:
             res += equal_bin.pop(0)
-
 
     return res[:-1]
 
