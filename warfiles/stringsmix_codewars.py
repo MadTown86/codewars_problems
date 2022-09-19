@@ -63,9 +63,9 @@ def mix(s1: str, s2: str):
 
     dict1: dict = {}
     dict2: dict = {}
+
+
     # This section cleans the string, removes uppercase and spaces and removes any chars with count == 1
-
-
     s1r = s1.strip(string.ascii_uppercase).replace(" ", "")
 
     for char in s1r:
