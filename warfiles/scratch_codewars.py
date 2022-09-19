@@ -1,20 +1,15 @@
-from collections import Counter
+"""Answers to land Perimeter Question"""
 
-def mix2(s1, s2):
-    c1, c2 = [Counter({s: n for s, n in Counter(c).items() if n > 1 and s.islower()}) for c in (s1, s2)]
-    print(c1)
-    print(c2)
-    return '/'.join(c + ':' + -n * s for n, c, s in
-                    sorted((-n, '=12'[(c1[s] == n) - (c2[s] == n)], s) for s, n in (c1 | c2).items()))
+land = lambda a: sum(t == ('X', 'X') for r in a for t in zip(r, r[1:])) * 2
 
-listtest: list = "abcasdfasdfasdfasdfa"
+def land_perimeter(a):
+    return 'Total land perimeter: ' + str(''.join(a).count('X') * 4 - land(a) - land(zip(*a)))
 
-testval2 = [123, 123, 123]
-d: Counter = Counter(testval2)
-d.most_common(1)
 
-c = Counter(listtest).items()
+"""
+land_perimeter(["OXOOOX", "OXOXOO", "XXOOOX", "OXXXOO"]
+"""
 
 if __name__ == "__main__":
-    t1, t2 = "looping is fun but dangerous", "less dangerous than coding"
-    mix2(t1, t2)
+    a = ["OXOOOX", "OXOXOO", "XXOOOX", "OXXXOO", "OOXOOX", "OXOOOO", "OOXOOX", "OOXOOO", "OXOOOO", "OXOOXX"]
+    land_perimeter(a)
