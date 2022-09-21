@@ -21,7 +21,6 @@ def likes(arg: list):
         "e": lambda arg:'{arg1}, {arg2} and {arg3} others like this'.format(arg1 = arg[0], arg2=arg[1], arg3=str(len(arg) - 2))
     }
 
-
     l = len(arg)
     return c["a"] if l == 0 else c['b'](arg) if l == 1 else c['c'](arg) if l == 2 else c['d'](arg) if l == 3 else c['e'](arg)
 
