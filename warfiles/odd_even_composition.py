@@ -4,7 +4,7 @@ Initial function takes the N value
  for x in range (1, N+1):
     partition = x + N-x
     if partition not in answerbin:
-        answerbin.append(partition)
+        answerbin.append(partition) 
 > return func(n-x)
 
 Alternate Answers:
