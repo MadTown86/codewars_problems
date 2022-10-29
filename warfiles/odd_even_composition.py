@@ -31,31 +31,27 @@ def odd_even_compositions(n):
         return odd_even_compositions(n - 1) * 2
 """
 
-from functools import cache
 
-@cache
 def func(num):
     count = 0
-    if num == 0:
-        return 1
     if num < 3:
         return num
-    for x in range(1, num + 1):
-        if num % 2 == 0:
-            if x % 2 == 0 or x == 1:
-                count += func(num - x)
-            else:
-                continue
-        else:
-            if x == 1 or x % 2 == 1:
-                count += func(num - x)
-            else:
-                continue
+    for x in range(1, num):
+        count += func(num-x)
     return count
 
+print(func(5))
 
-print(func(0))
-print(func(3))
-print(func(4))
-print(func(7))
-print(func(28))
+
+
+
+    
+
+
+
+
+
+        
+
+
+
