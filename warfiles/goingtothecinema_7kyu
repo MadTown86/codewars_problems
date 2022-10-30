@@ -1,0 +1,43 @@
+import math
+def movie(card, ticket, perc):
+    sticket = ticket
+    pticket = ticket
+    system_a = 0
+    system_b = card
+    visitcnt = 0
+    print(system_a)
+    print(system_b)
+    while system_a <= math.ceil(system_b):
+        system_a += sticket
+        pticket *= perc
+        system_b += pticket
+        visitcnt += 1
+    
+    return visitcnt
+
+print(movie(500, 15, .9))
+
+"""
+Interesting use of itertools
+*********************
+from itertools import takewhile, count, accumulate
+
+#OTHER ANSWER 1
+def movie(card, ticket, perc):
+    sys_b = accumulate(ticket*perc**n for n in count(1))
+    sys_a = accumulate(ticket for m in count(1))
+    return sum(1 for a in takewhile(lambda x: round(x[0] + card + 0.49) >= x[1], zip(sys_b, sys_a))) + 1
+
+
+#OTHER ANSWER 2
+def movie(card, ticket, perc, n = 1):
+    while card + ticket*perc*(1-perc**n)/(1-perc) - ticket*n > -1: 
+        n += 1
+    return n
+
+# OTHER ANSWER 3
+from itertools import count
+from math import ceil
+def movie(card, ticket, perc):
+    return next(n for n in count(1) if ceil(card + ticket * perc * (1 - perc ** n) / (1 - perc)) < ticket * n)
+"""
