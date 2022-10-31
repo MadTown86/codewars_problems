@@ -51,18 +51,18 @@ A_n+1,k = kA_n,k + (n + 2 - k)A_n,k-1
 
 
 """
-def get_sum(n):
-    if n == 0:
-        return 1
-    else:
-        line = n + 1
-        count = 0
-        sum = 0
-        while line:
-            sum += (line * (line + 1)/2) + (3 * count * line)
-            line -= 1
-            count += 1
-        return sum
+# def get_sum(n):
+#     if n == 0:
+#         return 1
+#     else:
+#         line = n + 1
+#         count = 0
+#         sum = 0
+#         while line:
+#             sum += (line * (line + 1)/2) + (3 * count * line)
+#             line -= 1
+#             count += 1
+#         return sum
 
 
 # First line will always be n+1 (n * (n + 1)/2)
@@ -78,23 +78,131 @@ recurse through i, j
 1. while loops with an if expression to alternate between incrementing j and i for each turn
 """
 
+ex_tria = [
+    1, 2, 3,
+    4, 5,
+    7
+]
+
+
 def makethetriangle(n):
-    j, i = 0, 0
-    equation = 2*row + col + 1
+    row, col = 0, 0
+
+    equation = lambda row, col: 2 * row + col + 1
+    triangle_bin = {}
+
+    #
+
+    def rowcur(n, row, col, colm):
+        templ = []
+        if colm > col:
+            col += 1
+            return rowcur(n, row, col, colm)
+        if col == n + 1:
+            return []
+        else:
+            templ.append(equation(row, col))
+            col += 1
+            return templ + rowcur(n, row, col, colm)
+
+    colm = -1
+    while row < n + 1:
+        row_list = []
+        row_list.append(rowcur(n, row, col, colm))
+        triangle_bin[str(row)] = row_list[0]
+        row += 1
+        colm = row
+
+    return triangle_bin
+
+
+import sys
+
+sys.setrecursionlimit(1000000)
+from functools import cache
+from functools import partial
+
+
+def get_sum_buildingtriangle(n):
+    if n == 0:
+        return 1
+    row, col = 0, 0
+
+    equation = lambda row, col: 2 * row + col + 1
+    tri_sum = 0
+
+
+
+    def rowcur(n, row, col, colm):
+        templ = []
+        if colm > col:
+            col += 1
+            return rowcur(n, row, col, colm)
+        if col == n + 1:
+            return []
+        else:
+            templ.append(equation(row, col))
+            col += 1
+            return templ + rowcur(n, row, col, colm)
+
+    colm = -1
+    while row < n + 1:
+        row_list = []
+        row_list.append(rowcur(n, row, col, colm))
+        tri_sum += sum(row_list[0])
+        row += 1
+        colm = row
+
+    return tri_sum
+
+
+def get_sum(n):
+    if n == 0:
+        return 1
+    equation = lambda nin: (nin * (nin + 1)/2)
+    count = 1
+    tri_sum = 0
+
+    def deletecur(n):
+        row, col = 0, 0
+
+        equation = lambda row, col: 2 * row + col + 1
+        tri_sum = 0
+        def rowcur(n, row, col, colm):
+            templ = []
+            if colm > col:
+                col += 1
+                return rowcur(n, row, col, colm)
+            if col == n + 1:
+                return []
+            else:
+                templ.append(equation(row, col))
+                col += 1
+                return templ + rowcur(n, row, col, colm)
+
+    def rowcur(nin, count):
+        nonlocal n
+        if nin == 0:
+            res = equation(nin)
+            return res
+        if nin == n:
+            nin -= 1
+            return 0 + rowcur(nin, count)
+        else:
+            res = equation(nin) - count
+            count += 3
+            nin -= 1
+            return res + rowcur(nin, count)
+
+    tri_sum = rowcur(n, count)
+
+    return tri_sum
 
 
 if __name__ == "__main__":
     import test
+
     tbin = [0, 1, 2, 3]
     ans = [1, 7, 22, 50]
 
-    print(get_sum(2))
-    # for i in tbin:
-    #     print(get_sum(i))
-
-
-
-
-
-
-
+    print(get_sum(1))
