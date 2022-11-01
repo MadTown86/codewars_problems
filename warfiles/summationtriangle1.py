@@ -123,86 +123,129 @@ from functools import cache
 from functools import partial
 
 
-def get_sum_buildingtriangle(n):
-    if n == 0:
-        return 1
-    row, col = 0, 0
+# def get_sum_buildingtriangle(n):
+#     if n == 0:
+#         return 1
+#     row, col = 0, 0
+#
+#     equation = lambda row, col: 2 * row + col + 1
+#     tri_sum = 0
+#
+#
+#
+#     def rowcur(n, row, col, colm):
+#         templ = []
+#         if colm > col:
+#             col += 1
+#             return rowcur(n, row, col, colm)
+#         if col == n + 1:
+#             return []
+#         else:
+#             templ.append(equation(row, col))
+#             col += 1
+#             return templ + rowcur(n, row, col, colm)
+#
+#     colm = -1
+#     while row < n + 1:
+#         row_list = []
+#         row_list.append(rowcur(n, row, col, colm))
+#         tri_sum += sum(row_list[0])
+#         row += 1
+#         colm = row
+#
+#     return tri_sum
 
-    equation = lambda row, col: 2 * row + col + 1
-    tri_sum = 0
 
-
-
-    def rowcur(n, row, col, colm):
-        templ = []
-        if colm > col:
-            col += 1
-            return rowcur(n, row, col, colm)
-        if col == n + 1:
-            return []
-        else:
-            templ.append(equation(row, col))
-            col += 1
-            return templ + rowcur(n, row, col, colm)
-
-    colm = -1
-    while row < n + 1:
-        row_list = []
-        row_list.append(rowcur(n, row, col, colm))
-        tri_sum += sum(row_list[0])
-        row += 1
-        colm = row
-
-    return tri_sum
-
+# def get_sum(n):
+#     if n == 0:
+#         return 1
+#     equation = lambda nin: (nin * (nin + 1)/2)
+#     count = 1
+#     tri_sum = 0
+#
+#     def deletecur(n):
+#         row, col = 0, 0
+#
+#         equation = lambda row, col: 2 * row + col + 1
+#         tri_sum = 0
+#         def rowcur(n, row, col, colm):
+#             templ = []
+#             if colm > col:
+#                 col += 1
+#                 return rowcur(n, row, col, colm)
+#             if col == n + 1:
+#                 return []
+#             else:
+#                 templ.append(equation(row, col))
+#                 col += 1
+#                 return templ + rowcur(n, row, col, colm)
+#
+#     def rowcur(nin, count):
+#         nonlocal n
+#         if nin == 0:
+#             res = equation(nin)
+#             return res
+#         if nin == n:
+#             nin -= 1
+#             return 0 + rowcur(nin, count)
+#         else:
+#             res = equation(nin) - count
+#             count += 3
+#             nin -= 1
+#             return res + rowcur(nin, count)
+#
+#     tri_sum = rowcur(n, count)
+#
+#     return tri_sum
 
 def get_sum(n):
-    if n == 0:
+    if n == 1:
         return 1
-    equation = lambda nin: (nin * (nin + 1)/2)
-    count = 1
-    tri_sum = 0
-
-    def deletecur(n):
-        row, col = 0, 0
-
-        equation = lambda row, col: 2 * row + col + 1
-        tri_sum = 0
-        def rowcur(n, row, col, colm):
-            templ = []
-            if colm > col:
-                col += 1
-                return rowcur(n, row, col, colm)
-            if col == n + 1:
-                return []
-            else:
-                templ.append(equation(row, col))
-                col += 1
-                return templ + rowcur(n, row, col, colm)
-
-    def rowcur(nin, count):
-        nonlocal n
-        if nin == 0:
-            res = equation(nin)
-            return res
-        if nin == n:
-            nin -= 1
-            return 0 + rowcur(nin, count)
-        else:
-            res = equation(nin) - count
-            count += 3
-            nin -= 1
-            return res + rowcur(nin, count)
-
-    tri_sum = rowcur(n, count)
-
-    return tri_sum
+    else:
+        return 1 + 6*n + (9/2) * n * (n-1) + (2/3) * n * (n - 1) * (n - 2)
 
 
 if __name__ == "__main__":
-    import test
-
-    tbin = [0, 1, 2, 3]
+    print(get_sum(4))
+    tbin = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+    binzer = [1, 7, 22, 50, 95, 161, 252, 372, 525, 715, 946, 1222, 1547, 1925, 2360, 2856, 3417]
     ans = [1, 7, 22, 50]
+    # tempbin = []
+    # for x in tbin:
+    #     tempbin.append(get_sum_buildingtriangle(x))
 
-    print(get_sum(1))
+    # #newbin1 = list(map(lambda x: math.sqrt(x), [x for x in tempbin]))
+    # #newbin2 = list(map(lambda x, y: math.sqrt(y - x), [x for x in range(len(tempbin))], [y for y in tempbin]))
+    # newbin3 = list(map(lambda x, y: x - y, tempbin[:-1], tempbin[1:]))
+    # newbin4 = list(map(lambda x, y: x - y, newbin3[:-1], newbin3[1:]))
+    # newbin5 = list(map(lambda x, y: x - y, newbin4[:-1], newbin4[1:]))
+    # print(tempbin)
+    # print(" " + str(newbin3))
+    # print("    " + str(newbin4))
+    # print("     " + str(newbin5))
+
+
+    """
+    I think I finally found the answer to this problem that has reminded me the necessity to review core math concepts...
+    
+    At least I found on my own that a derived difference between the sums of these polynomial expression goes to 4 so it is solvable
+    in the series model
+    
+    To summarize:
+    Create series of differences to see if you can find an arithmetic sequence (meaning increments by a constant)
+    
+    
+    The nth level differences are a sequence
+    1st Level differnces is a sequence of a 2nd degree polynomial
+    2nd level difference is an arithmetic sequence
+    3rd level difference is a constant
+    
+    https://www.anirdesh.com/math/algebra/sum-of-power-series.php
+    
+    1 + 6/1!n + 9/2!*n*(n-1) + 4/3!*n(n-1)(n-2)
+    
+    dingalingaling - ^ .  I can at least solve it mathematically in ONE shot so...for this specific one, I hope the following works.
+    """
+
+
+
