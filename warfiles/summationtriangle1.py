@@ -123,37 +123,37 @@ from functools import cache
 from functools import partial
 
 
-# def get_sum_buildingtriangle(n):
-#     if n == 0:
-#         return 1
-#     row, col = 0, 0
-#
-#     equation = lambda row, col: 2 * row + col + 1
-#     tri_sum = 0
-#
-#
-#
-#     def rowcur(n, row, col, colm):
-#         templ = []
-#         if colm > col:
-#             col += 1
-#             return rowcur(n, row, col, colm)
-#         if col == n + 1:
-#             return []
-#         else:
-#             templ.append(equation(row, col))
-#             col += 1
-#             return templ + rowcur(n, row, col, colm)
-#
-#     colm = -1
-#     while row < n + 1:
-#         row_list = []
-#         row_list.append(rowcur(n, row, col, colm))
-#         tri_sum += sum(row_list[0])
-#         row += 1
-#         colm = row
-#
-#     return tri_sum
+def get_sum_buildingtriangle(n):
+    if n == 0:
+        return 1
+    row, col = 0, 0
+
+    equation = lambda row, col: 2 * row + col + 1
+    tri_sum = 0
+
+
+
+    def rowcur(n, row, col, colm):
+        templ = []
+        if colm > col:
+            col += 1
+            return rowcur(n, row, col, colm)
+        if col == n + 1:
+            return []
+        else:
+            templ.append(equation(row, col))
+            col += 1
+            return templ + rowcur(n, row, col, colm)
+
+    colm = -1
+    while row < n + 1:
+        row_list = []
+        row_list.append(rowcur(n, row, col, colm))
+        tri_sum += sum(row_list[0])
+        row += 1
+        colm = row
+
+    return tri_sum
 
 
 # def get_sum(n):
@@ -206,23 +206,24 @@ def get_sum(n):
 
 
 if __name__ == "__main__":
-    print(get_sum(4))
+    import math
+    # print(get_sum(4))
     tbin = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
     binzer = [1, 7, 22, 50, 95, 161, 252, 372, 525, 715, 946, 1222, 1547, 1925, 2360, 2856, 3417]
     ans = [1, 7, 22, 50]
-    # tempbin = []
-    # for x in tbin:
-    #     tempbin.append(get_sum_buildingtriangle(x))
+    tempbin = []
+    for x in tbin:
+        tempbin.append(get_sum_buildingtriangle(x))
 
-    # #newbin1 = list(map(lambda x: math.sqrt(x), [x for x in tempbin]))
-    # #newbin2 = list(map(lambda x, y: math.sqrt(y - x), [x for x in range(len(tempbin))], [y for y in tempbin]))
-    # newbin3 = list(map(lambda x, y: x - y, tempbin[:-1], tempbin[1:]))
-    # newbin4 = list(map(lambda x, y: x - y, newbin3[:-1], newbin3[1:]))
-    # newbin5 = list(map(lambda x, y: x - y, newbin4[:-1], newbin4[1:]))
-    # print(tempbin)
-    # print(" " + str(newbin3))
-    # print("    " + str(newbin4))
-    # print("     " + str(newbin5))
+    newbin1 = list(map(lambda x: math.sqrt(x), [x for x in tempbin]))
+    newbin2 = list(map(lambda x, y: math.sqrt(y - x), [x for x in range(len(tempbin))], [y for y in tempbin]))
+    newbin3 = list(map(lambda x, y: x - y, tempbin[:-1], tempbin[1:]))
+    newbin4 = list(map(lambda x, y: x - y, newbin3[:-1], newbin3[1:]))
+    newbin5 = list(map(lambda x, y: x - y, newbin4[:-1], newbin4[1:]))
+    print(tempbin)
+    print(" " + str(newbin3))
+    print("    " + str(newbin4))
+    print("     " + str(newbin5))
 
 
     """
@@ -247,5 +248,16 @@ if __name__ == "__main__":
     dingalingaling - ^ .  I can at least solve it mathematically in ONE shot so...for this specific one, I hope the following works.
     """
 
+# from decimal import Decimal as D
+# import math
+# def get_sum(n):
+#     n = D(f'{n}')
+#     print(n)
+#     return round(D('1') + D('6')*n + (D('9')/(D('2'))) * n * (n-D('1')) + (D('2')/D('3')) * n * (n - D('1')) * (n - D('2')))
 
+
+"""
+def get_sum(n):
+    return (n+1)*(n+2)*(4*n+3)//6
+"""
 
