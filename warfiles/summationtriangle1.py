@@ -198,11 +198,12 @@ def get_sum_buildingtriangle(n):
 #
 #     return tri_sum
 
+from decimal import Decimal as D
 def get_sum(n):
     if n == 1:
         return 1
     else:
-        return 1 + 6*n + (9/2) * n * (n-1) + (2/3) * n * (n - 1) * (n - 2)
+        return D('1') + D('6')*n + (D('9')/(D('2') * n * (n-1) + (2/3) * n * (n - 1) * (n - 2)))
 
 
 if __name__ == "__main__":
