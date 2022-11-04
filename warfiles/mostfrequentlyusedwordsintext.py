@@ -27,17 +27,18 @@ def top_3_words(text: str) -> list[str]:
 
 
         ctext = text.split(" ")
-        for val in ctext:
-            print(f'TYPE: {type(val)} VAL LEN: {len(val)}  VAL: {val}')
 
-        othbin = ["'", "''", '"', '""']
-        for chars in othbin:
-            if chars in ctext:
-                ctext.remove(chars)
 
-        for item in range(len(ctext)-1):
-            if len(ctext[item]) is 0:
-                ctext.pop(item)
+        # othbin = ["'", "''", '"', '""']
+        # for chars in othbin:
+        #     if chars in ctext:
+        #         ctext.remove(chars)
+
+        ctextd = ctext
+        while '' in ctextd:
+            for x in ctextd:
+                if len(x) == 0:
+                    ctextd.remove(x)
 
         return ctext
 
