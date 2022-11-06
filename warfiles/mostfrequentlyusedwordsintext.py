@@ -104,11 +104,14 @@ on Sundays, made away with three-quarters of his income."""
 def top_3_words(text):
     word = ""
     dictpack = defaultdict(int)
-    for char in text:
+    for char in text + ' ':
         if char.isalpha() or char == "'":
-            word += char
+            print(char)
+            word += char.lower()
         else:
-            if word == "":
+            if word == "" or word == "'" or word == "''":
+                continue
+            elif word.count("'") == len(word):
                 continue
             else:
                 dictpack[word] += 1
@@ -120,8 +123,13 @@ def top_3_words(text):
         heapq.heappush(output, (value, key))
         if len(output) > 3:
             heapq.heappop(output)
-    
+            
     print(output)
+            
+    
+    output = sorted(output, reverse=True)
+    output = [x[1] for x in output]
+    return output
             
     
     
@@ -129,7 +137,8 @@ def top_3_words(text):
 
 
 if __name__ == "__main__":
-    print(top_3_words(samplequote))
+    print(top_3_words("a a c b b"))
+    # print(top_3_words(samplequote))
     # print(top_3_words(""))
     # print(top_3_words("e e e e"))
     # print(top_3_words("   e   ,  "))
