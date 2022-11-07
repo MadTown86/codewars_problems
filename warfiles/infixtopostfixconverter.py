@@ -75,12 +75,12 @@ def to_postfix2(i):
 
     for x, y in pairwise(reversed(i)):
         print(counter)
-        # if counter == int(len(i))-1:
-        #     print("HERE")
-        #     print(f'C == Len(): X: {x}, Y:{y}, Counter:{counter}')
-        #     parenthesis_check(x, y)
-        #     standard_update(x, y)
-        # print(f'START OF LOOP:  \nCOUNT: {counter}, \nPARENTF: {parentf}, \nPARENTB: {parentb}, \nX: {x}, Y: {y}')
+        if counter == int(len(i))-2:
+            print("HERE")
+            print(f'C == Len(): X: {x}, Y:{y}, Counter:{counter}')
+            parenthesis_check(x, y)
+            standard_update(x, y)
+        
         if counter == 0:
             print(f'C0 - X: {x}, Y:{y}, Counter:{counter}')
             parenthesis_check(x, y)
@@ -91,7 +91,7 @@ def to_postfix2(i):
             parenthesis_check(x, y)
             standard_update(x, y)
 
-        if counter == len(i)-1:
+        if counter == len(i)+1:
             print("HERE")
             print(f'C == Len(): X: {x}, Y:{y}, Counter:{counter}')
             parenthesis_check(x, y)
@@ -112,7 +112,7 @@ def to_postfix2(i):
             # print(f'END OF LOOP:  \nCOUNT: {counter}, \nPARENTF: {parentf}, \nPARENTB: {parentb}, \nX: {x}, Y: {y}')
         counter += 1
         # print(symb)
-    return ans
+    return ''.join(reversed(ans))
                      
                 
 
