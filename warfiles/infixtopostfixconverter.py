@@ -1,10 +1,35 @@
 """
 https://www.codewars.com/kata/52e864d1ffb6ac25db00017f/train/python
 """
-test1 =
+test1 = "2+7*5"
+test2 = '3*3/(7+1)'
+test3 = '1^2^3'
+test4 = '(5-4-1)+9/5/2-7/1/7'
+test5 = '3+(5-3*3*7^8)+(4/9*7)+6-6^(4*4*9*0+4)-0' #'3533*78^*-+49/7*+6+644*9*0*4+^-0-'
+test6 = '0/9-4^8^(2+4/7)+0^4' # 09/48247/+^^-04^+
 teststr = "5+(6-2)*9+3^(7-1)"
 teststr_revr = ')1-7(^3+9*)2-6(+5'
 smallstr = '(1-7-1-9)'
+
+# Lollerskates, love the guy who developed this >>
+# So Rules
+
+"""
+Variable or Number then copied directly to output
+If operator, it is pushed onto the operator stack.  
+If the current operators precedence is lower than that of the operators at the top of the stack or the precedences
+equal and the opeartor is left associative, then that operator is popped off the stack and added to the output.
+
+Finally any remaining operators are popped off the stack and added to the output.
+"""
+
+"""
+Notes on process: left to right precedence exists within the parenthesis and standard 
+
+For instance 7/7/1 isn't 771// it the order has to maintain left to right calculations first or perhaps it is for
+readability - 77/1/ is how it would be written, and within parenthesis (5-4-1) isn't 541-- because this would 
+potentially confuse order of operations doing 4-1 first, so it is written 54-1- you would have to calculate 5-4 first
+"""
 
 """
 List Out Steps:
@@ -12,45 +37,134 @@ List Out Steps:
 2. switch 7 and operand (ans = 17-)
 3. 
 """
+
+def to_post4(t):
+    p = {'(': 5, ')': 5, '^': 4, '*': 3, '/': 3, '-': 2, '+': 2}
+    left_a = {'(': False, ')': False, '^': True, '*': True, '/': True, '-': True, '+': True}
+    ans = ""
+    operators = []
+    pin_ops = []
+    flag = False
+    for x in t:
+        print(f'ANS: {ans} :: Operators: {operators} :: Pin_Ops: {pin_ops} :: Flag: {flag} : X: {x}')
+        if x.isnumeric():
+            ans += x
+        elif x == '(':
+            flag = True
+        elif flag:
+            if x == ')':
+                while pin_ops:
+                    ans += pin_ops.pop()
+                    flag = False
+            elif len(pin_ops) > 1:
+                if p[x] > p[pin_ops[len(pin_ops)-1]]:
+                    pin_ops.append(x)
+                if p[x] == p[pin_ops[len(pin_ops)-1]]:
+                    if left_a[pin_ops[len(pin_ops)-1]]:
+                        ans += pin_ops.pop()
+                        pin_ops.append(x)
+                    else:
+                        pin_ops.append(len(pin_ops)-1)
+                if p[x] < p[pin_ops[0]]:
+                    ans += pin_ops.pop()
+                    pin_ops.append(x)
+            elif len(pin_ops) == 1:
+                if p[x] > p[pin_ops[0]]:
+                    pin_ops.append(x)
+                if p[x] == p[pin_ops[0]]:
+                    if left_a[pin_ops[0]]:
+                        ans += pin_ops.pop()
+                        pin_ops.append(x)
+                    else:
+                        pin_ops.append(x)
+                if p[x] < p[pin_ops[0]]:
+                    ans += pin_ops.pop()
+                    pin_ops.append(x)
+            else:
+                if x != ')':
+                    pin_ops.append(x)
+                # Write case for when in parenthesis but no operators to compare
+        elif operators:
+            if len(operators) > 1:
+                if p[x] > p[operators[len(operators)-1]]:
+                    operators.append(x)
+                if p[x] == p[operators[len(operators)-1]]:
+                    if left_a[operators[len(operators)-1]]:
+                        ans += operators.pop()
+                        operators.append(x)
+                    else:
+                        operators.append(len(operators)-1)
+                if p[x] < p[operators[len(operators)-1]]:
+                    ans += operators.pop()
+                    operators.append(x)
+            if len(operators) == 1:
+                if p[x] > p[operators[0]]:
+                    operators.append(x)
+                if p[x] == p[operators[0]]:
+                    if left_a[operators[0]]:
+                        ans += operators.pop()
+                        operators.append(x)
+                    else:
+                        operators.append(x)
+                if p[x] < p[operators[0]]:
+                    ans += operators.pop()
+                    operators.append(x)
+            # Write case for when already has operators to compare
+        else:
+            # Write case for if no parenthesis and no pre-existing operators
+            operators.append(x)
+
+    if operators:
+        while operators:
+            ans += operators.pop()
+
+    # Write case for dumping remaining stack elements
+    return ans
+
+
+
 def to_post3(teststr):
     op = string.punctuation
     ans = ""
     operators = []
-    inparoperators = []
+    inpar_operators = []
     prec = {'(': 5, ')': 5, '^': 4, '*': 3, '//': 3, '-': 2, '+': 2}
     parflag = False
     for x in teststr:
         if x.isnumeric():
             ans += x
         else:
+            # Parenthesis case - enter branch
             if x == '(':
                 parflag = True
-                inparoperators.append(x)
+                inpar_operators.append(x)
+            # While iterating within parenthesis
             if parflag:
                 if x == ')':
-                    tl_inparoperators = [(x, prec[y]) for x, y in enumerate(inparoperators)]
+                    tl_inparoperators = [(x, prec[y]) for x, y in enumerate(inpar_operators)]
                     tl_sort = sorted(tl_inparoperators, key=lambda tupler: tupler[1], reverse=True)
-                    while tl_sort:
-                        print(tl_sort)
-                        for oppar in tl_sort:
-                            if oppar[1] == ')' or oppar[1] == '(':
-                                inparoperators.pop(inparoperators[oppar[0]])
+                    while len(inpar_operators) > 0:
+                        for operator in tl_sort:
+                            print(tl_sort)
+                            if operator[1] == '(' or ')':
+                                inpar_operators.pop(inpar_operators.index(operator[1]))
                             else:
-                                ans += inparoperators.pop(oppar[0])
+                                ans += inpar_operators.pop(inpar_operators.index(operator[1]))
+                    # Reset parflag and exit branch
                     parflag = False
                 else:
-                    inparoperators.append(x)
+                    # Keeps adding operators until
+                    inpar_operators.append(x)
+            # Operator case, external
+            if operators:
+                if prec[x] <= prec[operators[len(operators)-1]]:
+                    for opex in reversed(operators):
+                        if prec[x] <= prec[operators[len(operators)-1]]:
+                            ans += operators.pop()
+                else:
+                    operators.append(x)
             else:
-                pass
-
-
-
-            if teststr.index(x) < len(teststr) and len(operators) >= 2:
-                print(operators)
-                if prec[x] < prec[operators[len(operators)-1]]:
-                    while len(operators) > 0:
-                        ans += operators.pop()
-            operators.append(x)
+                operators.append(x)
 
     return ans, operators
 
@@ -159,7 +273,8 @@ def to_postfix2(i):
 
 
 if __name__ == "__main__":
-    print(to_post3(teststr))
+    print(to_post4(teststr))
+    # print(to_post3(smallstr))
 
         
         
