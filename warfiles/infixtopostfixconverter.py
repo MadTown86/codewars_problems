@@ -37,83 +37,56 @@ List Out Steps:
 2. switch 7 and operand (ans = 17-)
 3. 
 """
-
+from typing import Any
 def to_post4(t):
     p = {'(': 5, ')': 5, '^': 4, '*': 3, '/': 3, '-': 2, '+': 2}
-    left_a = {'(': False, ')': False, '^': True, '*': True, '/': True, '-': True, '+': True}
+    left_a = {'(': False, ')': False, '^': True, '*': False, '/': True, '-': False, '+': False}
     ans = ""
     operators = []
     pin_ops = []
     flag = False
+    def check(x: str, inp: Any) -> None:
+        nonlocal ans
+        if len(inp) >= 1:
+            if p[x] > p[inp[len(inp)-1]]:
+                inp.append(x)
+            elif p[x] == p[inp[len(inp) - 1]]:
+                if left_a[inp[len(inp) - 1]]:
+                    ans += inp.pop()
+                    inp.append(x)
+                else:
+                    inp.append(len(inp) - 1)
+            elif p[x] < p[inp[0]]:
+                ans += inp.pop()
+                inp.append(x)
+
     for x in t:
         print(f'ANS: {ans} :: Operators: {operators} :: Pin_Ops: {pin_ops} :: Flag: {flag} : X: {x}')
         if x.isnumeric():
             ans += x
-        elif x == '(':
-            flag = True
-        elif flag:
-            if x == ')':
-                while pin_ops:
-                    ans += pin_ops.pop()
-                    flag = False
-            elif len(pin_ops) > 1:
-                if p[x] > p[pin_ops[len(pin_ops)-1]]:
-                    pin_ops.append(x)
-                if p[x] == p[pin_ops[len(pin_ops)-1]]:
-                    if left_a[pin_ops[len(pin_ops)-1]]:
-                        ans += pin_ops.pop()
-                        pin_ops.append(x)
-                    else:
-                        pin_ops.append(len(pin_ops)-1)
-                if p[x] < p[pin_ops[0]]:
-                    ans += pin_ops.pop()
-                    pin_ops.append(x)
-            elif len(pin_ops) == 1:
-                if p[x] > p[pin_ops[0]]:
-                    pin_ops.append(x)
-                if p[x] == p[pin_ops[0]]:
-                    if left_a[pin_ops[0]]:
-                        ans += pin_ops.pop()
-                        pin_ops.append(x)
-                    else:
-                        pin_ops.append(x)
-                if p[x] < p[pin_ops[0]]:
-                    ans += pin_ops.pop()
-                    pin_ops.append(x)
-            else:
-                if x != ')':
-                    pin_ops.append(x)
-                # Write case for when in parenthesis but no operators to compare
-        elif operators:
-            if len(operators) > 1:
-                if p[x] > p[operators[len(operators)-1]]:
-                    operators.append(x)
-                if p[x] == p[operators[len(operators)-1]]:
-                    if left_a[operators[len(operators)-1]]:
-                        ans += operators.pop()
-                        operators.append(x)
-                    else:
-                        operators.append(len(operators)-1)
-                if p[x] < p[operators[len(operators)-1]]:
-                    ans += operators.pop()
-                    operators.append(x)
-            if len(operators) == 1:
-                if p[x] > p[operators[0]]:
-                    operators.append(x)
-                if p[x] == p[operators[0]]:
-                    if left_a[operators[0]]:
-                        ans += operators.pop()
-                        operators.append(x)
-                    else:
-                        operators.append(x)
-                if p[x] < p[operators[0]]:
-                    ans += operators.pop()
-                    operators.append(x)
-            # Write case for when already has operators to compare
+            continue
         else:
-            # Write case for if no parenthesis and no pre-existing operators
-            operators.append(x)
+            if x == '(':
+                flag = True
+            elif flag:
+                if x == ')':
+                    flag = False
+                    while pin_ops:
+                        ans += pin_ops.pop()
 
+                elif len(pin_ops) >= 1:
+                    inside = pin_ops
+                    check(x, inside)
+                else:
+                    if x != ')':
+                        pin_ops.append(x)
+                    # Write case for when in parentheses but no operators to compare
+            elif operators:
+                outside = operators
+                check(x, outside)
+            else:
+                # Write case for if no parenthesis and no pre-existing operators
+                operators.append(x)
     if operators:
         while operators:
             ans += operators.pop()
